@@ -38,7 +38,7 @@ function draw() {
     
     let currenttime = millis();
     let elapsedTime = currenttime - circlearray[i].createdAt;
-    if (elapsedTime > 20000) { 
+    if (elapsedTime > 15000) { 
       circlearray[i].opacity -= 0.5; // Gradually reduce opacity
       if (circlearray[i].opacity <= 0) {
         circlearray.splice(i, 1); // Remove the circle once fully transparent
@@ -115,11 +115,11 @@ function mold()
       let wordData = "data";
 
       textFont(customFont);
-      fill((250,240,240), opacityDish);
+      fill((250,250,250), opacityDish);
       textSize(10);
      // textStyle(BOLD);
       textAlign(CENTER, CENTER);
-      blendMode(OVERLAY);
+      
       
 
       let textRadius = CurrentDiam / 3; 
