@@ -13,7 +13,7 @@ let customFont;
 function preload()
 {
   Dish = loadImage("petri3.png");
-  customFont = loadFont('fontd/dogica.ttf');
+  customFont = loadFont('dogica.ttf');
   
 }
 
