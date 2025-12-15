@@ -16,9 +16,7 @@ function preload() {
   customFont = loadFont("dogica.ttf");
 }
 
-function setup() {
-  createCanvas(650, 650);
-}
+createCanvas(650, 650);
 
 function draw() {
   background(255, 255, 255, 20);
