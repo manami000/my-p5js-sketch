@@ -8,7 +8,7 @@ let maskGraphics;
 let opacityDish = 300;
 let rotationAngle = 0;
 let customFont;
-let showText = true; // Initially, show the instruction text
+let showText = true;
 let Dish;
 
 function preload() {
@@ -18,9 +18,7 @@ function preload() {
 
 function setup() {
   createCanvas(650, 650);
-
-  // ⬅️ resize UNA SOLA VOLTA
-  Dish.resize(width, height);
+  Dish.resize(650, 650); // resize UNA VOLTA SOLA
 }
 
 function draw() {
@@ -28,7 +26,7 @@ function draw() {
 
   mold();
 
-  // testo centrato come prima
+  // testo centrato COME PRIMA
   if (showText) {
     fill(150);
     textSize(10);
@@ -124,8 +122,7 @@ function mold() {
       textAlign(CENTER, CENTER);
 
       let textRadius = CurrentDiam / 3;
-      let rotationSpeed = 0.001;
-      circlearray[i].rotationAngle += rotationSpeed;
+      circlearray[i].rotationAngle += 0.001;
 
       if (CurrentDiam >= 40) {
         for (let j = 0; j < wordRot.length; j++) {
@@ -152,8 +149,6 @@ function mold() {
           );
         }
       }
-
-      blendMode(BLEND);
     }
   }
 }
