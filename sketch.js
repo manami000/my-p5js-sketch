@@ -4,10 +4,11 @@ let circleposY = 0;
 let increase = 1;
 let circlecolor = 255;
 let circlearray = [];
+let maskGraphics;
 let opacityDish = 300;
 let rotationAngle = 0;
 let customFont;
-let showText = true;
+let showText = true; // Initially, show the instruction text
 let Dish;
 
 function preload() {
@@ -16,13 +17,18 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(650, 650); // canvas = PNG size
+  createCanvas(650, 650);
+
+  // ⬅️ resize UNA SOLA VOLTA
+  Dish.resize(width, height);
 }
 
 function draw() {
   background(255, 255, 255, 20);
+
   mold();
 
+  // testo centrato come prima
   if (showText) {
     fill(150);
     textSize(10);
@@ -56,23 +62,24 @@ function mouseClicked() {
     circleposY = mouseY;
     increase = 0;
 
+    circlecolor = color(
+      random(230, 290),
+      random(200, 300),
+      random(120, 250),
+      opacityDish
+    );
+
     let maxincrease = random(50, 250);
 
     circlearray.push({
       x: circleposX,
       y: circleposY,
-      color: color(
-        random(230, 290),
-        random(200, 300),
-        random(120, 250),
-        opacityDish
-      ),
+      color: circlecolor,
       increase: increase,
       maxincrease: maxincrease + 10,
       createdAt: millis(),
       opacity: opacityDish,
       rotationAngle: 0,
-      hasText: false
     });
 
     circlearray.push({
@@ -88,25 +95,26 @@ function mouseClicked() {
       maxincrease: maxincrease,
       createdAt: millis(),
       opacity: opacityDish,
+      hasText: random(1) < 0.5,
       rotationAngle: 0,
-      hasText: random(1) < 0.5
     });
   }
 }
 
 function mold() {
   noStroke();
+  fill(circlecolor);
 
   for (let i = 0; i < circlearray.length; i++) {
     let c = circlearray[i].color.levels;
-    let d = circleDiam + circlearray[i].increase;
+    let CurrentDiam = circleDiam + circlearray[i].increase;
 
     drawingContext.filter = "blur(10px)";
     fill(c[0], c[1], c[2], circlearray[i].opacity);
-    circle(circlearray[i].x, circlearray[i].y, d);
+    circle(circlearray[i].x, circlearray[i].y, CurrentDiam);
     drawingContext.filter = "none";
 
-    if (circlearray[i].hasText) {
+    if (circlearray[i].hasText === true) {
       let wordRot = "rot";
       let wordData = "data";
 
@@ -115,30 +123,41 @@ function mold() {
       textSize(10);
       textAlign(CENTER, CENTER);
 
-      let r = d / 3;
-      circlearray[i].rotationAngle += 0.001;
+      let textRadius = CurrentDiam / 3;
+      let rotationSpeed = 0.001;
+      circlearray[i].rotationAngle += rotationSpeed;
 
-      if (d >= 40) {
+      if (CurrentDiam >= 40) {
         for (let j = 0; j < wordRot.length; j++) {
-          let a =
+          let angle =
             map(j, 0, wordRot.length - 1, (3 * PI) / 4, PI / 4) +
             circlearray[i].rotationAngle;
-          text(wordRot[j], circlearray[i].x + r * cos(a), circlearray[i].y + r * sin(a));
+          text(
+            wordRot[j],
+            circlearray[i].x + textRadius * cos(angle),
+            circlearray[i].y + textRadius * sin(angle)
+          );
         }
       }
 
-      if (d >= 90) {
+      if (CurrentDiam >= 90) {
         for (let j = 0; j < wordData.length; j++) {
-          let a =
+          let angle =
             map(j, 0, wordData.length - 1, (5 * PI) / 4, (7 * PI) / 4) +
             circlearray[i].rotationAngle;
-          text(wordData[j], circlearray[i].x + r * cos(a), circlearray[i].y + r * sin(a));
+          text(
+            wordData[j],
+            circlearray[i].x + textRadius * cos(angle),
+            circlearray[i].y + textRadius * sin(angle)
+          );
         }
       }
+
+      blendMode(BLEND);
     }
   }
 }
 
 function dish() {
-  image(Dish, 0, 0, width, height);
+  image(Dish, 0, 0);
 }
