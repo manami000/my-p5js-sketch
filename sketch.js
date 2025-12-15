@@ -161,4 +161,7 @@ function dish() {
   Dish.resize(650, 650);
 }
 
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
 
