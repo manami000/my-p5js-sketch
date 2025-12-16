@@ -153,6 +153,13 @@ function mold() {
   }
 }
 
+
+
 function dish() {
   image(Dish, 0, 0);
+}
+
+function touchStarted() {
+  mouseClicked();
+  return false; // blocca lo scroll su iOS mentre tocchi
 }
