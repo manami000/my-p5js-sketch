@@ -1,63 +1,9 @@
-let circleDiam = 1;
-let circleposX = 0;
-let circleposY = 0;
-let increase = 1;
-let circlecolor = 255;
-let circlearray = [];
-let maskGraphics;
-let opacityDish = 300;
-let rotationAngle = 0;
-let customFont;
-let showText = true;
-let Dish;
-
-function preload() {
-  Dish = loadImage("petri3.png");
-  customFont = loadFont("dogica.ttf");
-}
-
-function setup() {
-  createCanvas(650, 650);
-  Dish.resize(650, 650); // resize UNA VOLTA SOLA
-}
-
-function draw() {
-  background(255, 255, 255, 20);
-
-  mold();
-
-  // testo centrato COME PRIMA
-  if (showText) {
-    fill(150);
-    textSize(10);
-    textFont(customFont);
-    textAlign(CENTER, CENTER);
-    text("Click anywhere", width / 2, height / 2);
-  }
-
-  for (let i = circlearray.length - 1; i >= 0; i--) {
-    if (circlearray[i].increase < circlearray[i].maxincrease) {
-      circlearray[i].increase += 0.3;
-    }
-
-    let elapsedTime = millis() - circlearray[i].createdAt;
-    if (elapsedTime > 15000) {
-      circlearray[i].opacity -= 0.5;
-      if (circlearray[i].opacity <= 0) {
-        circlearray.splice(i, 1);
-      }
-    }
-  }
-
-  dish();
-}
-
-function mouseClicked() {
+function handlePress(x, y) {
   if (showText) showText = false;
 
-  if (mouseX >= 50 && mouseX <= 600 && mouseY >= 50 && mouseY <= 600) {
-    circleposX = mouseX;
-    circleposY = mouseY;
+  if (x >= 50 && x <= 600 && y >= 50 && y <= 600) {
+    circleposX = x;
+    circleposY = y;
     increase = 0;
 
     circlecolor = color(
@@ -99,67 +45,15 @@ function mouseClicked() {
   }
 }
 
-function mold() {
-  noStroke();
-  fill(circlecolor);
-
-  for (let i = 0; i < circlearray.length; i++) {
-    let c = circlearray[i].color.levels;
-    let CurrentDiam = circleDiam + circlearray[i].increase;
-
-    drawingContext.filter = "blur(10px)";
-    fill(c[0], c[1], c[2], circlearray[i].opacity);
-    circle(circlearray[i].x, circlearray[i].y, CurrentDiam);
-    drawingContext.filter = "none";
-
-    if (circlearray[i].hasText === true) {
-      let wordRot = "rot";
-      let wordData = "data";
-
-      textFont(customFont);
-      fill(250, 250, 250, opacityDish);
-      textSize(10);
-      textAlign(CENTER, CENTER);
-
-      let textRadius = CurrentDiam / 3;
-      circlearray[i].rotationAngle += 0.001;
-
-      if (CurrentDiam >= 40) {
-        for (let j = 0; j < wordRot.length; j++) {
-          let angle =
-            map(j, 0, wordRot.length - 1, (3 * PI) / 4, PI / 4) +
-            circlearray[i].rotationAngle;
-          text(
-            wordRot[j],
-            circlearray[i].x + textRadius * cos(angle),
-            circlearray[i].y + textRadius * sin(angle)
-          );
-        }
-      }
-
-      if (CurrentDiam >= 90) {
-        for (let j = 0; j < wordData.length; j++) {
-          let angle =
-            map(j, 0, wordData.length - 1, (5 * PI) / 4, (7 * PI) / 4) +
-            circlearray[i].rotationAngle;
-          text(
-            wordData[j],
-            circlearray[i].x + textRadius * cos(angle),
-            circlearray[i].y + textRadius * sin(angle)
-          );
-        }
-      }
-    }
-  }
-}
-
-
-
-function dish() {
-  image(Dish, 0, 0);
+function mousePressed() {
+  handlePress(mouseX, mouseY);
 }
 
 function touchStarted() {
-  mouseClicked();
-  return false; // blocca lo scroll su iOS mentre tocchi
+  if (touches && touches.length) {
+    handlePress(touches[0].x, touches[0].y);
+  } else {
+    handlePress(mouseX, mouseY);
+  }
+  return false; // prevents page scroll on iOS
 }
