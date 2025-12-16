@@ -15,10 +15,17 @@ function preload() {
   customFont = loadFont("dogica.ttf");
 }
 
-function setup() {
+/*function setup() {
   createCanvas(650, 650);
   Dish.resize(650, 650); // resize once
+}*/
+
+function setup() {
+  const s = min(windowWidth, windowHeight);
+  createCanvas(s, s);
+  Dish.resize(s, s);
 }
+
 
 function draw() {
   background(255, 255, 255, 20);
@@ -172,3 +179,10 @@ function mold() {
 function dish() {
   image(Dish, 0, 0);
 }
+
+function windowResized() {
+  const s = min(windowWidth, windowHeight);
+  resizeCanvas(s, s);
+  Dish.resize(s, s);
+}
+
